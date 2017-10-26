@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# curl and pipe it to bin/bash to initialize a docker build environment and
+# curl and pipe it to /bin/bash to initialize a docker build environment and
 # start a build:
-# curl -o- https://gist.githubusercontent.com/moepot/some-path/init-docker-buildenv.sh | /bin/bash
+# curl -o- https://raw.githubusercontent.com/mimacom/buildenv/master/init-docker-buildenv.sh | /bin/bash
 #
 # Use this script e.g. on a build server, while you are in a repo with the
 # following structure:
@@ -50,6 +50,8 @@ function build_and_push() {
 }
 
 function hash() {
+  platform=`uname | tr '[:upper:]' '[:lower:]'`
+  
   if [ $platform -eq "darwin" ]
   then
     shasum -a 256 $1 | awk '{ print $1 }'
@@ -62,7 +64,6 @@ docker_base=`egrep "^[ \t]*FROM" docker/Dockerfile | awk '{ print $2 }'`
 docker_repo="mimacom/buildenv"
 docker_tag=`hash docker/Dockerfile`
 docker_image="${docker_repo}:${docker_tag}"
-platform=`uname | tr '[:upper:]' '[:lower:]'`
 
 # pull base image
 docker pull "${docker_base}" | grep newer
