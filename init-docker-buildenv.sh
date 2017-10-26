@@ -60,7 +60,8 @@ function hash() {
   fi
 }
 
-function is_bambooagent() { return hostname | egrep '^mima-bambooagent-[0-9]+.mimacom.local$' }
+function is_bambooagent() { hostname | egrep --quiet 'mima-bambooagent-[0-9]+.mimacom.local'; }
+
 
 docker_base=`egrep "^[ \t]*FROM" docker/Dockerfile | awk '{ print $2 }'`
 docker_repo="mimacom/buildenv"
