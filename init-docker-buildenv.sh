@@ -60,6 +60,8 @@ function hash() {
   fi
 }
 
+function is_bambooagent() { return hostname | egrep '^mima-bambooagent-[0-9]+.mimacom.local$' }
+
 docker_base=`egrep "^[ \t]*FROM" docker/Dockerfile | awk '{ print $2 }'`
 docker_repo="mimacom/buildenv"
 docker_tag=`hash docker/Dockerfile`
@@ -110,4 +112,16 @@ chmod +x ./docker/start.sh
 
 # run build inside container
 echo "init-docker-buildenv: starting job in a new docker container"
-docker run --rm -i -u 5000 -v `pwd`:/build/ -v /home/bambooagent/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
+
+if is_bambooagent
+then
+  docker run --rm -i -u 5000 -v `pwd`:/build/ -v /home/bambooagent/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
+else
+  user_host=`whoami`
+  mkdir -p ~/.m2
+  chown -R 5000:5000 ~/.m2
+  docker run --rm -i -u 5000 -v `pwd`:/build/ -v ~/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
+  chown -R "${user_host}:${user_host}" ~/.m2
+  rm ./docker/envvars.sh
+  rm ./docker/start.sh
+fi
