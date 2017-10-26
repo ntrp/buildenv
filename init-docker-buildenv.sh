@@ -118,7 +118,7 @@ else
   user_host=`whoami`
   mkdir -p ~/.m2
   #sudo chown -R 5000:5000 ~/.m2
-  docker run --rm -ti -u 5000 -v `pwd`:/build/ -v ~/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
+  docker run --rm -i -u 5000 -v `pwd`:/build/ -v ~/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
   #sudo chown -R "${user_host}:${user_host}" ~/.m2
   rm ./docker/envvars.sh
   rm ./docker/start.sh
