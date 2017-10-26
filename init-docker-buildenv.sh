@@ -95,9 +95,6 @@ fi
 # fetch bamboo vars
 export -p | grep "bamboo_" > ./docker/envvars.sh
 
-# fail and stop on first error
-set -o errexit
-
 # write start script
 cat<<EOF > ./docker/start.sh
 #!/usr/bin/env bash
