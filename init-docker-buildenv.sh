@@ -89,11 +89,11 @@ else
   fi
 fi
 
-# fail and stop on first error
-set -o errexit
-
 # fetch bamboo vars
 export -p | grep "bamboo_" > ./docker/envvars.sh
+
+# fail and stop on first error
+set -o errexit
 
 # write start script
 cat<<EOF > ./docker/start.sh
