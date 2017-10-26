@@ -50,6 +50,8 @@ function build_and_push() {
 }
 
 function hash() {
+  platform=`uname | tr '[:upper:]' '[:lower:]'`
+  
   if [ "${platform}" == "darwin" ]
   then
     shasum -a 256 $1 | awk '{ print $1 }'
@@ -62,7 +64,6 @@ docker_base=`egrep "^[ \t]*FROM" docker/Dockerfile | awk '{ print $2 }'`
 docker_repo="mimacom/buildenv"
 docker_tag=`hash docker/Dockerfile`
 docker_image="${docker_repo}:${docker_tag}"
-platform=`uname | tr '[:upper:]' '[:lower:]'`
   
 
 # pull base image
