@@ -49,10 +49,20 @@ function build_and_push() {
   fi
 }
 
+function hash() {
+  if [ $platform -eq "darwin" ]
+  then
+    shasum -a 256 $1 | awk '{ print $1 }'
+  else
+    sha256sum $1 | awk '{ print $1 }'
+  fi
+}
+
 docker_base=`egrep "^[ \t]*FROM" docker/Dockerfile | awk '{ print $2 }'`
 docker_repo="mimacom/buildenv"
-docker_tag=`sha256sum docker/Dockerfile | awk '{ print $1 }'`
+docker_tag=`hash docker/Dockerfile`
 docker_image="${docker_repo}:${docker_tag}"
+platform=`uname | tr '[:upper:]' '[:lower:]'`
 
 # pull base image
 docker pull "${docker_base}" | grep newer
