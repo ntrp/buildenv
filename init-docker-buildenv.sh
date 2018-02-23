@@ -113,7 +113,7 @@ echo "init-docker-buildenv: starting job in a new docker container"
 
 if is_bambooagent
 then
-  docker run --privileged --rm -i -u 5000 -v `pwd`:/build/ -v /home/bambooagent/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
+  docker run --privileged --rm -i -u 5000 -v `pwd`:/build/ -v ~bambooagent/.m2/:/home/user/.m2/ "${docker_image}" "/build/docker/start.sh"
 else
   user_host=`whoami`
   mkdir -p ~/.m2
