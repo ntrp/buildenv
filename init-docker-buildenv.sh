@@ -113,6 +113,9 @@ echo "init-docker-buildenv: starting job in a new docker container"
 
 if is_bambooagent
 then
+  # create directories if they do not exist
+  mkdir -p ~bambooagent/.m2
+  mkdir -p ~bambooagent/.gradle
   docker run --privileged --rm -i \
      -u 5000 \
      -v `pwd`:/build/ \
@@ -121,7 +124,9 @@ then
      "${docker_image}" "/build/docker/start.sh"
 else
   user_host=`whoami`
+  # create directories if they do not exist
   mkdir -p ~/.m2
+  mkdir -p ~/.gradle
   #sudo chown -R 5000:5000 ~/.m2
   docker run --privileged --rm -i \
      -u 5000 \
